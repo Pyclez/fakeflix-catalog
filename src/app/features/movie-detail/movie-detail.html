@@ -1,0 +1,62 @@
+<div class="movie-detail" (click)="onBackdropClick($event)">
+  <div class="movie-detail__panel">
+    <button class="movie-detail__close" type="button" (click)="onClose()" aria-label="Fechar">
+      ✕
+    </button>
+
+    @if (loading()) {
+      <div class="movie-detail__state">Carregando...</div>
+    } @else if (error()) {
+      <div class="movie-detail__state">{{ error() }}</div>
+    } @else if (details(); as movie) {
+      <div
+        class="movie-detail__backdrop"
+        [style.background-image]="
+          'linear-gradient(180deg, rgba(24,24,24,0.15) 0%, #181818 92%), url(' +
+          backdropUrl() +
+          ')'
+        "
+      >
+        <h2 class="movie-detail__title">{{ movie.title }}</h2>
+      </div>
+
+      <div class="movie-detail__body">
+        <div class="movie-detail__meta">
+          <span class="movie-detail__rating">★ {{ movie.vote_average | number: '1.1-1' }}</span>
+          <span>{{ releaseYear() }}</span>
+          @if (formattedRuntime()) {
+            <span>{{ formattedRuntime() }}</span>
+          }
+        </div>
+
+        @if (movie.tagline) {
+          <p class="movie-detail__tagline">{{ movie.tagline }}</p>
+        }
+
+        <p class="movie-detail__overview">{{ movie.overview || 'Sinopse não disponível.' }}</p>
+
+        @if (movie.genres.length) {
+          <div class="movie-detail__genres">
+            @for (genre of movie.genres; track genre.id) {
+              <span class="movie-detail__genre-pill">{{ genre.name }}</span>
+            }
+          </div>
+        }
+
+        @if (topCast().length) {
+          <div class="movie-detail__cast">
+            <h3>Elenco principal</h3>
+            <div class="movie-detail__cast-list">
+              @for (member of topCast(); track member.id) {
+                <div class="movie-detail__cast-member">
+                  <span class="movie-detail__cast-name">{{ member.name }}</span>
+                  <span class="movie-detail__cast-character">{{ member.character }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

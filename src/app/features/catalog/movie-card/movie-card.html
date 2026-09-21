@@ -1,0 +1,13 @@
+<button
+  class="movie-card"
+  type="button"
+  (click)="onSelect()"
+  [attr.aria-label]="'Ver detalhes de ' + movie().title"
+>
+  <img class="movie-card__poster" [src]="posterUrl()" [alt]="movie().title" loading="lazy" />
+
+  <div class="movie-card__overlay">
+    <span class="movie-card__title">{{ movie().title }}</span>
+    <span class="movie-card__rating">★ {{ movie().vote_average | number: '1.1-1' }}</span>
+  </div>
+</button>

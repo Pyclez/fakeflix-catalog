@@ -1,0 +1,46 @@
+@if (loading()) {
+  <div class="catalog__status">
+    <p>Carregando catálogo...</p>
+  </div>
+} @else if (error()) {
+  <div class="catalog__status">
+    <p>{{ error() }}</p>
+  </div>
+} @else {
+  <header class="catalog__navbar">
+    <span class="catalog__logo">FAKEFLIX</span>
+  </header>
+
+  @if (featured(); as movie) {
+    <section
+      class="catalog__hero"
+      [style.background-image]="
+        'linear-gradient(180deg, rgba(20,20,20,0) 45%, #141414 100%), url(' +
+        featuredBackdropUrl() +
+        ')'
+      "
+    >
+      <div class="catalog__hero-content">
+        <h1 class="catalog__hero-title">{{ movie.title }}</h1>
+        <p class="catalog__hero-overview">{{ movie.overview }}</p>
+        <button class="catalog__hero-button" type="button" (click)="onMovieSelected(movie)">
+          Mais informações
+        </button>
+      </div>
+    </section>
+  }
+
+  <main class="catalog__rows">
+    @for (row of rows(); track row.title) {
+      <app-movie-row
+        [title]="row.title"
+        [movies]="row.movies"
+        (movieSelected)="onMovieSelected($event)"
+      />
+    }
+  </main>
+}
+
+@if (selectedMovieId(); as movieId) {
+  <app-movie-detail [movieId]="movieId" (close)="closeDetail()" />
+}
